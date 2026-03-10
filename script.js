@@ -7,118 +7,137 @@ const gifStages = [
     "https://media.tenor.com/CivArbX7NzQAAAAj/somsom1012.gif",              // 5 tuyệt vọng
     "https://media.tenor.com/5_tv1HquZlcAAAAj/chiikawa.gif",                // 6 gục ngã
     "https://media1.tenor.com/m/uDugCXK4vI4AAAAC/chiikawa-hachiware.gif"  // 7 khóc chạy mất
-]
+];
 
 const noMessages = [
     "Không",
     "Em chắc chưa? 🤔",
-    "Shu ơii!!... 🥺",
-    "Em mà bấm Không là anh buồn==...",
-    "Anh sẽ dỗi thật đấy... 😢",
+    "Shu uwu xin mà... 🥺",
+    "Em bấm Không là anh dỗi đấy...",
+    "Anh sẽ đi ẹ thật đấy... 😢",
     "Đi mà vợ yêu??? 💔",
     "Đừng đối xử với anh như thế...",
     "Cơ hội cuối cùng đấy! 😭",
     "Đố em bấm trúng được anh 😜"
-]
+];
 
 const yesTeasePokes = [
     "Thử bấm 'Không' trước xem... có điều bất ngờ đấy 😏",
     "Cứ bấm thử nút kia đi... một lần thôi 👀",
     "Không bấm thử nút 'Không' là tiếc lắm đấy 😈",
     "Anh thách em bấm được nút 'Không' đấy 😏"
-]
+];
 
-let yesTeasedCount = 0
-let noClickCount = 0
-let runawayEnabled = false
-let musicPlaying = true
+let yesTeasedCount = 0;
+let noClickCount = 0;
+let runawayEnabled = false;
+let musicPlaying = true;
 
-const catGif = document.getElementById('cat-gif')
-const yesBtn = document.getElementById('yes-btn')
-const noBtn = document.getElementById('no-btn')
-const music = document.getElementById('bg-music')
+const catGif = document.getElementById('cat-gif');
+const yesBtn = document.getElementById('yes-btn');
+const noBtn = document.getElementById('no-btn');
+const music = document.getElementById('bg-music');
 
 // Tự động phát nhạc
-music.muted = true
-music.volume = 0.3
+music.muted = true;
+music.volume = 0.3;
 music.play().then(() => {
-    music.muted = false
+    music.muted = false;
 }).catch(() => {
     document.addEventListener('click', () => {
-        music.muted = false
-        music.play().catch(() => {})
-    }, { once: true })
-})
+        music.muted = false;
+        music.play().catch(() => {});
+    }, { once: true });
+});
 
 function toggleMusic() {
     if (musicPlaying) {
-        music.pause()
-        musicPlaying = false
-        document.getElementById('music-toggle').textContent = '🔇'
+        music.pause();
+        musicPlaying = false;
+        document.getElementById('music-toggle').textContent = '🔇';
     } else {
-        music.muted = false
-        music.play()
-        musicPlaying = true
-        document.getElementById('music-toggle').textContent = '🔊'
+        music.muted = false;
+        music.play();
+        musicPlaying = true;
+        document.getElementById('music-toggle').textContent = '🔊';
     }
 }
 
 function handleYesClick() {
     if (!runawayEnabled) {
         // Trêu vợ để vợ bấm thử nút No trước
-        const msg = yesTeasePokes[Math.min(yesTeasedCount, yesTeasePokes.length - 1)]
-        yesTeasedCount++
-        showTeaseMessage(msg)
-        return
+        const msg = yesTeasePokes[Math.min(yesTeasedCount, yesTeasePokes.length - 1)];
+        yesTeasedCount++;
+        showTeaseMessage(msg);
+        return;
     }
-    window.location.href = 'yes.html'
+    window.location.href = 'yes.html';
 }
 
 function showTeaseMessage(msg) {
-    let toast = document.getElementById('tease-toast')
-    toast.textContent = msg
-    toast.classList.add('show')
-    clearTimeout(toast._timer)
-    toast._timer = setTimeout(() => toast.classList.remove('show'), 2500)
+    let toast = document.getElementById('tease-toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
 function handleNoClick() {
-    noClickCount++
+    noClickCount++;
 
     // Đổi tin nhắn năn nỉ
-    const msgIndex = Math.min(noClickCount, noMessages.length - 1)
-    noBtn.textContent = noMessages[msgIndex]
+    const msgIndex = Math.min(noClickCount, noMessages.length - 1);
+    noBtn.textContent = noMessages[msgIndex];
 
     // Làm nút Yes to dần lên
-    const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize)
-    yesBtn.style.fontSize = `${currentSize * 1.35}px`
-    const padY = Math.min(18 + noClickCount * 5, 60)
-    const padX = Math.min(45 + noClickCount * 10, 120)
-    yesBtn.style.padding = `${padY}px ${padX}px`
+    const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+    yesBtn.style.fontSize = `${currentSize * 1.35}px`;
+    const padY = Math.min(18 + noClickCount * 5, 60);
+    const padX = Math.min(45 + noClickCount * 10, 120);
+    yesBtn.style.padding = `${padY}px ${padX}px`;
 
     // Thu nhỏ nút No
     if (noClickCount >= 2) {
-        const noSize = parseFloat(window.getComputedStyle(noBtn).fontSize)
-        noBtn.style.fontSize = `${Math.max(noSize * 0.85, 10)}px`
+        const noSize = parseFloat(window.getComputedStyle(noBtn).fontSize);
+        noBtn.style.fontSize = `${Math.max(noSize * 0.85, 10)}px`;
     }
 
     // Đổi GIF theo từng giai đoạn "đau khổ"
-    const gifIndex = Math.min(noClickCount, gifStages.length - 1)
-    swapGif(gifStages[gifIndex])
+    const gifIndex = Math.min(noClickCount, gifStages.length - 1);
+    swapGif(gifStages[gifIndex]);
 
     // Nút No bắt đầu chạy trốn sau 5 lần bấm
     if (noClickCount >= 5 && !runawayEnabled) {
-        enableRunaway()
-        runawayEnabled = true
+        enableRunaway();
+        runawayEnabled = true;
     }
 }
 
 function swapGif(src) {
-    catGif.style.opacity = '0'
+    catGif.style.opacity = '0';
     setTimeout(() => {
-        catGif.src = src
-        catGif.style.opacity = '1'
-    }, 200)
+        catGif.src = src;
+        catGif.style.opacity = '1';
+    }, 200);
 }
 
-function
+function enableRunaway() {
+    noBtn.addEventListener('mouseover', runAway);
+    noBtn.addEventListener('touchstart', runAway, { passive: true });
+}
+
+function runAway() {
+    const margin = 20;
+    const btnW = noBtn.offsetWidth;
+    const btnH = noBtn.offsetHeight;
+    const maxX = window.innerWidth - btnW - margin;
+    const maxY = window.innerHeight - btnH - margin;
+
+    const randomX = Math.random() * maxX + margin / 2;
+    const randomY = Math.random() * maxY + margin / 2;
+
+    noBtn.style.position = 'fixed';
+    noBtn.style.left = `${randomX}px`;
+    noBtn.style.top = `${randomY}px`;
+    noBtn.style.zIndex = '50';
+}
